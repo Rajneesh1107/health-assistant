@@ -1,7 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import signUpLogo from "../assets/sign_up.jpg";
+import axios from "axios";
 export const SignUp = () => {
+  const initialuserDetail = {
+    fullName: "",
+    email: "",
+    password: "",
+  };
+  const [userDetails, setUserDetails] = useState(initialuserDetail);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails((pre) => {
+      return { ...pre, [name]: value };
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let data = registerUser(userDetails);
+    console.log(data);
+    setUserDetails(() => {
+      return initialuserDetail;
+    });
+  };
+
+  const registerUser = async (payload) => {
+    console.log(payload);
+    let res = await axios.post("http://localhost:8000/users", {
+      ...payload,
+    });
+
+    console.log(res);
+  };
+  const { fullName, email, password } = userDetails;
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -29,7 +61,7 @@ export const SignUp = () => {
                 Sign In
               </a>
             </p>
-            <form action="#" method="POST" className="mt-8">
+            <form onSubmit={handleSubmit} method="POST" className="mt-8">
               <div className="space-y-5">
                 <div>
                   <label
@@ -45,7 +77,10 @@ export const SignUp = () => {
                       type="text"
                       placeholder="Full Name"
                       id="name"
-                    ></input>
+                      name="fullName"
+                      value={fullName}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 <div>
@@ -62,7 +97,10 @@ export const SignUp = () => {
                       type="email"
                       placeholder="Email"
                       id="email"
-                    ></input>
+                      name="email"
+                      value={email}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 <div>
@@ -81,13 +119,16 @@ export const SignUp = () => {
                       type="password"
                       placeholder="Password"
                       id="password"
-                    ></input>
+                      name="password"
+                      value={password}
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 <div>
                   <button
-                    type="button"
-                    className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                    type="submit"
+                    className="inline-flex w-full items-center justify-center rounded-md bg-rose-700 px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                   >
                     Create Account <ArrowRight className="ml-2" size={16} />
                   </button>
@@ -101,7 +142,7 @@ export const SignUp = () => {
               >
                 <span className="mr-2 inline-block">
                   <svg
-                    className="h-6 w-6 text-rose-500"
+                    className="h-6 w-6 text-blue-500"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -110,22 +151,6 @@ export const SignUp = () => {
                   </svg>
                 </span>
                 Sign up with Google
-              </button>
-              <button
-                type="button"
-                className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-              >
-                <span className="mr-2 inline-block">
-                  <svg
-                    className="h-6 w-6 text-[#2563EB]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0 0 14.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
-                  </svg>
-                </span>
-                Sign up with Facebook
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 require("dotenv").config({ silent: true });
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ase256 = require("aes256");
 const encyptionKey = process.env.ENCRYPTION_KEY;
@@ -45,6 +46,15 @@ exports.decryptData = (data) => {
 exports.hashedPassword = async (plainPassword, saltRound) => {
   try {
     const hashed = await bcrypt.hash(plainPassword, saltRound);
+    return hashed;
+  } catch (error) {
+    return error;
+  }
+};
+//hashed password
+exports.comparePassword = async (plainPassword, hashedPassword) => {
+  try {
+    const hashed = await bcrypt.compare(plainPassword, hashedPassword);
     return hashed;
   } catch (error) {
     return error;
